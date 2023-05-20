@@ -32,7 +32,7 @@ class BaseNetwork {
     var data = await jsonDecode(utf8.decode(response.bodyBytes));
 
     List<Cats?> items = [];
-    print(data);
+    // print(data);
     if (data != null && data != "") {
       for (var i in data) {
         if (i != null) {

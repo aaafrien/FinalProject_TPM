@@ -29,10 +29,9 @@ class _NavbarState extends State<Navbar> {
           data: ThemeData(canvasColor: Palette.mainColor),
           child: BottomNavigationBar(
             items: [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined), label: 'Home'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite_outline), label: 'Favorites'),
+                  icon: Icon(Icons.favorite), label: 'Favorites'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.group), label: 'Profile'),
             ],
