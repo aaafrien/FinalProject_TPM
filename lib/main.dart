@@ -1,5 +1,5 @@
 import 'package:finalproject/components/palettes.dart';
-import 'package:finalproject/pages/register.dart';
+import 'package:finalproject/pages/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Palette.mainColor,
         fontFamily: "Poppins",
       ),
-      home: RegisterPage(),
+      home: LoginPage(),
     );
   }
 }

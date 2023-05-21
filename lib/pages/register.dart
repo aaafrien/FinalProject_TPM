@@ -13,11 +13,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-
   String error = "";
 
   late UserModel _currentUser;
@@ -46,21 +42,23 @@ class _RegisterPageState extends State<RegisterPage> {
             MaterialButton(
               onPressed: () async {
                 if (_usernameController.text.isEmpty ||
-                    _passwordController.text.isEmpty ||
-                    _confirmPasswordController.text.isEmpty) {
-                  setState(() {
-                    error = "Please fill all the fields";
-                  });
+                    _passwordController.text.isEmpty) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text("Please fill all fields"),
+                          ),
+                        );
+                      });
                   return;
                 }
 
-                if (_confirmPasswordController.text !=
-                    _passwordController.text) {
-                  setState(() {
-                    error = "Password and Confirm Password must be the same";
-                  });
-                  return;
-                }
                 UserModel user = UserModel(
                     username: _usernameController.text,
                     password: _passwordController.text);
