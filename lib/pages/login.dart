@@ -1,6 +1,7 @@
 import 'package:finalproject/components/navbar.dart';
 import 'package:finalproject/components/palettes.dart';
 import 'package:finalproject/data/user_database_helper.dart';
+import 'package:finalproject/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -80,8 +81,10 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(color: Palette.mainColor)),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegisterPage()));
                   },
                   child:
                       Text('Register', style: TextStyle(color: Colors.black)),

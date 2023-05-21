@@ -74,14 +74,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   error = "User Created";
                 });
               },
-              child: Text("Register", style: TextStyle(color: Colors.white)),
-              height: 50,
-              padding: EdgeInsets.symmetric(horizontal: 50),
+              height: 45,
               color: Palette.mainColor,
+              child: Text(
+                "Register",
+                style: TextStyle(color: Colors.white, fontSize: 16.0),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
