@@ -1,7 +1,7 @@
 import 'package:finalproject/components/palettes.dart';
-import 'package:finalproject/data/user_database_helper.dart';
 import 'package:finalproject/model/user.dart';
 import 'package:finalproject/pages/login.dart';
+import 'package:finalproject/service/user_database_helper.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {

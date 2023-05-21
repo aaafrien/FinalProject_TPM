@@ -1,7 +1,6 @@
-import 'package:finalproject/components/navbar.dart';
 import 'package:finalproject/components/palettes.dart';
-import 'package:finalproject/data/user_database_helper.dart';
 import 'package:finalproject/pages/register.dart';
+import 'package:finalproject/service/user_database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

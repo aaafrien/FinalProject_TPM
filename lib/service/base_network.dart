@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:finalproject/data/cats.dart';
+import 'package:finalproject/model/cats.dart';
 import 'package:http/http.dart' as http;
 
 class BaseNetwork {

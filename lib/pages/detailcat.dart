@@ -1,5 +1,5 @@
 import 'package:finalproject/components/palettes.dart';
-import 'package:finalproject/data/cats.dart';
+import 'package:finalproject/model/cats.dart';
 import 'package:flutter/material.dart';
 
 class DetailCat extends StatefulWidget {

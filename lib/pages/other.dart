@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 
-class MoneyConverter extends StatefulWidget {
-  const MoneyConverter({Key? key}) : super(key: key);
+class Other extends StatefulWidget {
+  const Other({Key? key}) : super(key: key);
 
   @override
-  State<MoneyConverter> createState() => _MoneyConverterState();
+  State<Other> createState() => _OtherState();
 }
 
-class _MoneyConverterState extends State<MoneyConverter> {
+class _OtherState extends State<Other> {
   late double input;
   late double output;
   late String currencyInput;
@@ -124,7 +124,7 @@ class _MoneyConverterState extends State<MoneyConverter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Money Converter')),
+      appBar: AppBar(title: Text('Other')),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 100),
         child: Column(

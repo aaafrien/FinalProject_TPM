@@ -1,6 +1,6 @@
 import 'package:finalproject/components/palettes.dart';
 import 'package:finalproject/pages/detailcat.dart';
-import 'package:finalproject/services/base_network.dart';
+import 'package:finalproject/service/base_network.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

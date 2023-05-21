@@ -1,5 +1,5 @@
 import 'package:finalproject/components/palettes.dart';
-import 'package:finalproject/pages/convertmoney.dart';
+import 'package:finalproject/pages/other.dart';
 import 'package:finalproject/pages/homepage.dart';
 import 'package:finalproject/pages/profile.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class Navbar extends StatefulWidget {
 
 class _NavbarState extends State<Navbar> {
   int _selectedIndex = 0;
-  List pages = [Homepage(), MoneyConverter(), ProfilePage()];
+  List pages = [Homepage(), Other(), ProfilePage()];
 
   void _onItemTapped(int index) {
     setState(() {

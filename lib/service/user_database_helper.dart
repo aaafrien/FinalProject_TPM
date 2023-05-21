@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:finalproject/data/database_helper.dart';
 import 'package:finalproject/model/user.dart';
+import 'package:finalproject/service/database_helper.dart';
 
 class userDatabaseHelper {
   static String tableName = 'User';
@@ -13,8 +13,8 @@ class userDatabaseHelper {
     var digest = sha1.convert(key);
     user.password = digest.toString();
 
-    List<Map> list = await db!.query('$tableName',
-        where: 'username = ?', whereArgs: [username]);
+    List<Map> list = await db!
+        .query('$tableName', where: 'username = ?', whereArgs: [username]);
 
     if (list.isEmpty) {
       await db.insert(tableName, user.toMap());
