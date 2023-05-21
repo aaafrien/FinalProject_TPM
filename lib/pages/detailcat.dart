@@ -2,16 +2,21 @@ import 'package:finalproject/components/palettes.dart';
 import 'package:finalproject/data/cats.dart';
 import 'package:flutter/material.dart';
 
-class DetailCat extends StatelessWidget {
+class DetailCat extends StatefulWidget {
   final Cats cats;
 
   const DetailCat({Key? key, required this.cats}) : super(key: key);
 
   @override
+  State<DetailCat> createState() => _DetailCatState();
+}
+
+class _DetailCatState extends State<DetailCat> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(cats.name),
+        title: Text(widget.cats.name),
       ),
       body: Padding(
         padding: EdgeInsets.all(20),
@@ -21,70 +26,134 @@ class DetailCat extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                cats.imageLink,
+                widget.cats.imageLink,
                 width: MediaQuery.of(context).size.width,
-                height: 250,
+                height: 300,
                 fit: BoxFit.cover,
               ),
             ),
             SizedBox(height: 20),
-            Text(
-              cats.name,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text("Description :"),
-            SizedBox(height: 10),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Origin"),
-                      SizedBox(height: 5),
-                      Text(cats.origin),
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      border: Border.all(color: Palette.mainColor)),
+                Text("About " + widget.cats.name,
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                SizedBox(height: 20),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width / 3.5,
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text("Intelligence",
+                              style: TextStyle(color: Colors.white)),
+                          SizedBox(height: 5),
+                          Text((widget.cats.intelligence).toString(),
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        color: Palette.mainColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 3.5,
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text("Friendly",
+                              style: TextStyle(color: Colors.white)),
+                          SizedBox(height: 5),
+                          Text((widget.cats.strangerFriendly).toString(),
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        color: Palette.mainColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 3.5,
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text("Playfulness",
+                              style: TextStyle(color: Colors.white)),
+                          SizedBox(height: 5),
+                          Text((widget.cats.playfulness).toString(),
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        color: Palette.mainColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
+                  ],
                 ),
-                // Text("Origin"),
-                // Text("Lenght"),
-                // Text("Min Weight :"),
-                // Text("Max Weight :"),
-                // Text("Min Life Expectancy :"),
-                // Text("Max Life Expectancy :"),
-                // Text("Intelligence :"),
-                // Text("Playfulness :"),
-                // Text("General Health :"),
-                // Text("Children Friendly :"),
-                // Text("Stranger Friendly :"),
+                SizedBox(height: 20),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width / 3.5,
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text("Length", style: TextStyle(color: Colors.white)),
+                          SizedBox(height: 5),
+                          Text((widget.cats.length),
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        color: Palette.mainColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 3.5,
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text("Origin", style: TextStyle(color: Colors.white)),
+                          SizedBox(height: 5),
+                          Text((widget.cats.origin).toString(),
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        color: Palette.mainColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 3.5,
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text("Health", style: TextStyle(color: Colors.white)),
+                          SizedBox(height: 5),
+                          Text((widget.cats.generalHealth).toString(),
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        color: Palette.mainColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
-            // Row(
-            //   children: [
-            //     Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         Text(cats.origin),
-            //         Text(cats.length),
-            //         Text((cats.maxWeight).toString()),
-            //         Text((cats.minWeight).toString()),
-            //         Text((cats.minLifeExpectancy).toString()),
-            //         Text((cats.maxLifeExpectancy).toString()),
-            //         Text((cats.intelligence).toString()),
-            //         Text((cats.playfulness).toString()),
-            //         Text((cats.generalHealth).toString()),
-            //         Text((cats.childrenFriendly).toString()),
-            //         Text((cats.strangerFriendly).toString()),
-            //       ],
-            //     )
-            //   ],
-            // )
           ],
         ),
       ),

@@ -3,15 +3,17 @@ import 'package:hive/hive.dart';
 part 'user_lib.g.dart'; // generate file using build_runner
 
 @HiveType(typeId: 0)
-class User extends HiveObject {
+class UserModel {
+  UserModel({required this.username, required this.password});
+
   @HiveField(0)
-  final String username;
+  String username;
 
   @HiveField(1)
-  final String password;
+  String password;
 
-  User({
-    required this.username,
-    required this.password,
-  });
+  @override
+  String toString() {
+    return 'UserModel{username: $username, password: $password}';
+  }
 }

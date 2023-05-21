@@ -1,5 +1,7 @@
 import 'package:finalproject/components/navbar.dart';
 import 'package:finalproject/components/palettes.dart';
+import 'package:finalproject/data/user_db.dart';
+import 'package:finalproject/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,34 +15,17 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  late SharedPreferences prefs;
-
-  @override
-  void initState() {
-    super.initState();
-    checkIsLogin();
-  }
-
-  void checkIsLogin() async {
-    prefs = await SharedPreferences.getInstance();
-
-    bool? isLogin = (prefs.getString('username') != null) ? true : false;
-
-    if (isLogin && mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => Navbar(),
-          ),
-          (route) => false);
+  void validateAndSave() {
+    final FormState? form = _formKey.currentState;
+    if (form != null) {
+      if (form.validate()) {
+        print('Form is valid');
+      } else {
+        print('Form is invalid');
+      }
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _usernameController.dispose();
-    _passwordController.dispose();
   }
 
   @override
@@ -48,105 +33,63 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Text("Login"),
-            _usernameField(),
-            SizedBox(height: 20),
-            _passwordField(),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            "Sorry, we're working on getting this fixed ASAP"),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Forgot password?',
-                    style: TextStyle(
-                        color: Color(0xffFEA1A1),
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 30),
-            MaterialButton(
-              onPressed: () async {
-                if (_usernameController.text == "user") {
-                  if (_passwordController.text == "user") {
-                    await prefs.setString('username', _usernameController.text);
-                    if (mounted) {
-                      Navigator.popAndPushNamed(context, '/navbar');
-                    }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Wrong password!"),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Wrong username/password!"),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                }
-              },
-              height: 45,
-              color: Palette.mainColor,
-              child: Text(
-                "Login",
-                style: TextStyle(color: Colors.white, fontSize: 16.0),
-              ),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Don\'t have an account?',
-                  style: TextStyle(
-                    color: Palette.mainColor,
-                    fontSize: 14.0,
-                  ),
+        child: Center(
+          child: Column(
+            children: [
+              Text("Login"),
+              _usernameField(),
+              SizedBox(height: 20),
+              _passwordField(),
+              SizedBox(height: 30),
+              MaterialButton(
+                onPressed: () {
+                  validateAndSave();
+                  String currentUsername = _usernameController.value.text;
+                  String currentPassword = _passwordController.value.text;
+
+                  _processLogin(currentUsername, currentPassword);
+                },
+                height: 45,
+                color: Palette.mainColor,
+                child: Text(
+                  "Login",
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
                 ),
-                TextButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            "Sorry, we're working on getting this fixed ASAP"),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Register',
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Don\'t have an account?',
                     style: TextStyle(
-                      color: Color(0xffFEA1A1),
+                      color: Palette.mainColor,
                       fontSize: 14.0,
                     ),
                   ),
-                )
-              ],
-            ),
-          ],
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterPage()));
+                    },
+                    child: Text(
+                      'Register',
+                      style: TextStyle(
+                        color: Color(0xffFEA1A1),
+                        fontSize: 14.0,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -225,5 +168,37 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _processLogin(String username, String password) async {
+    final UserDB _hive = UserDB();
+    bool found = false;
+
+    found = _hive.checkLogin(username, password);
+    if (!found) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Akun tidak ada"),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else {
+      setLogin(username, password);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          // builder: (context) => HomePage(username:username),
+          builder: (context) => Navbar(),
+        ),
+      );
+    }
+  }
+
+  void setLogin(String username, String password) async {
+    final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
+
+    SharedPreferences getPref = await _pref;
+    getPref.setBool('isLogin', true);
+    getPref.setString('username', username);
+    getPref.setString('password', password);
   }
 }

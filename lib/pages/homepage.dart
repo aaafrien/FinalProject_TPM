@@ -98,7 +98,6 @@ class _HomepageState extends State<Homepage> {
                                             snapshot.data![index].name,
                                             style: TextStyle(fontSize: 18),
                                           ),
-                                          SizedBox(height: 10),
                                           Text("by " +
                                               snapshot.data![index].origin),
                                           Container(
@@ -134,8 +133,6 @@ class _HomepageState extends State<Homepage> {
                                   child: Padding(
                                     padding: EdgeInsets.all(10),
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -147,10 +144,11 @@ class _HomepageState extends State<Homepage> {
                                             width: MediaQuery.of(context)
                                                 .size
                                                 .width,
-                                            height: 100,
+                                            height: 80,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
+                                        SizedBox(height: 10),
                                         Text(snapshot.data![index].name),
                                         Text(
                                           snapshot.data![index].origin,
