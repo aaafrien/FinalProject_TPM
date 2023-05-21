@@ -1,4 +1,4 @@
-abstract class RouteGenerator {
+abstract class RouterName {
   static const login = '/login';
   static const register = '/register';
   static const homepage = '/homepage';

@@ -20,78 +20,82 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Login",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Palette.mainColor),
-            ),
-            SizedBox(height: 30),
-            _usernameField(),
-            SizedBox(height: 20),
-            _passwordField(),
-            SizedBox(height: 30),
-            MaterialButton(
-              onPressed: () async {
-                try {
-                  var listUser =
-                      await userDatabaseHelper.getUserByUsernameAndPassword(
-                          _usernameController.text, _passwordController.text);
-                  if (listUser.length > 0) {
-                    final snackbar = SnackBar(
-                      content: Text('Login Success'),
-                    );
-                    SharedPreferences pref =
-                        await SharedPreferences.getInstance();
-                    pref.setString('username', listUser[0].username!);
-                    pref.setInt('userId', listUser[0].id!);
-                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Navbar()));
-                  }
-                } catch (e) {
-                  setState(() {
-                    error = 'Username or Password is wrong';
-                  });
-                }
-              },
-              height: 45,
-              color: Palette.mainColor,
-              child: Text(
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/images/cat.png",
+                height: 200,
+                fit: BoxFit.fitWidth,
+              ),
+              SizedBox(height: 20),
+              Text(
                 "Login",
-                style: TextStyle(color: Colors.white, fontSize: 16.0),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Palette.mainColor),
               ),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+              SizedBox(height: 30),
+              _usernameField(),
+              SizedBox(height: 20),
+              _passwordField(),
+              SizedBox(height: 30),
+              MaterialButton(
+                onPressed: () async {
+                  try {
+                    var listUser =
+                        await userDatabaseHelper.getUserByUsernameAndPassword(
+                            _usernameController.text, _passwordController.text);
+                    if (listUser.length > 0) {
+                      SharedPreferences pref =
+                          await SharedPreferences.getInstance();
+                      pref.setString('username', listUser[0].username!);
+                      pref.setInt('userId', listUser[0].id!);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Navbar()));
+                    }
+                  } catch (e) {
+                    setState(() {
+                      error = 'Username or Password is wrong';
+                    });
+                  }
+                },
+                height: 45,
+                color: Palette.mainColor,
+                child: Text(
+                  "Login",
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
               ),
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Have an account?',
-                    style: TextStyle(color: Palette.mainColor)),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RegisterPage()));
-                  },
-                  child:
-                      Text('Register', style: TextStyle(color: Colors.black)),
-                )
-              ],
-            ),
-          ],
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Don\'t have an account?',
+                      style: TextStyle(color: Palette.mainColor)),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterPage()));
+                    },
+                    child:
+                        Text('Register', style: TextStyle(color: Colors.black)),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -104,31 +108,17 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         labelText: 'Username',
         hintText: 'username',
-        labelStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 14.0,
-          fontWeight: FontWeight.w400,
-        ),
-        hintStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 14.0,
-        ),
-        prefixIcon: Icon(
-          Icons.person,
-          color: Palette.mainColor,
-          size: 18,
-        ),
+        labelStyle: TextStyle(color: Palette.mainColor),
+        hintStyle: TextStyle(color: Palette.mainColor),
+        prefixIcon: Icon(Icons.person, color: Palette.mainColor),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
-        floatingLabelStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 18.0,
-        ),
+        floatingLabelStyle: TextStyle(color: Palette.mainColor),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
@@ -142,31 +132,17 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         labelText: 'Password',
         hintText: 'password',
-        labelStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 14.0,
-          fontWeight: FontWeight.w400,
-        ),
-        hintStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 14.0,
-        ),
-        prefixIcon: Icon(
-          Icons.lock,
-          color: Palette.mainColor,
-          size: 18,
-        ),
+        labelStyle: TextStyle(color: Palette.mainColor),
+        hintStyle: TextStyle(color: Palette.mainColor),
+        prefixIcon: Icon(Icons.person, color: Palette.mainColor),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
-        floatingLabelStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 18.0,
-        ),
+        floatingLabelStyle: TextStyle(color: Palette.mainColor),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );

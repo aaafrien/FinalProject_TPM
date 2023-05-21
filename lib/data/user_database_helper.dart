@@ -14,7 +14,7 @@ class userDatabaseHelper {
     user.password = digest.toString();
 
     List<Map> list = await db!.query('$tableName',
-        where: 'username = ? or email = ?', whereArgs: [username]);
+        where: 'username = ?', whereArgs: [username]);
 
     if (list.isEmpty) {
       await db.insert(tableName, user.toMap());
@@ -40,7 +40,8 @@ class userDatabaseHelper {
 
   static Future<UserModel> getUsersById(int userId) async {
     print(userId);
-    UserModel user = UserModel(username: '', password: '');
+    UserModel user =
+        UserModel(name: '', nim: '', username: '', email: '', password: '');
     final db = await DatabaseHelper.instance.database;
     List<Map> list =
         await db!.query('$tableName', where: 'id = ?', whereArgs: [userId]);

@@ -1,24 +1,23 @@
+import 'package:finalproject/components/navbar.dart';
 import 'package:finalproject/components/palettes.dart';
 import 'package:finalproject/pages/login.dart';
+import 'package:finalproject/routes/route.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var userId = prefs.getInt('userId');
+  // print(userId);
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+  runApp(
+    MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Palette.mainColor,
-        fontFamily: "Poppins",
-      ),
-      home: LoginPage(),
-    );
-  }
+      title: '123200093 - Final Project TPM',
+      theme: ThemeData(primarySwatch: Palette.mainColor, fontFamily: 'Poppins'),
+      home: userId == null ? LoginPage() : Navbar(),
+      onGenerateRoute: RouterGenerator.generateRoute,
+    ),
+  );
 }

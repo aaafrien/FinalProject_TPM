@@ -12,95 +12,158 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nimController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String error = "";
-
-  late UserModel _currentUser;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Register",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Palette.mainColor),
-            ),
-            SizedBox(height: 30),
-            _usernameField(),
-            SizedBox(height: 20),
-            _passwordField(),
-            SizedBox(height: 30),
-            MaterialButton(
-              onPressed: () async {
-                if (_usernameController.text.isEmpty ||
-                    _passwordController.text.isEmpty) {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Text("Please fill all fields"),
-                          ),
-                        );
-                      });
-                  return;
-                }
-
-                UserModel user = UserModel(
-                    username: _usernameController.text,
-                    password: _passwordController.text);
-                try {
-                  await userDatabaseHelper.createUser(user);
-                } catch (e) {
-                  setState(() {
-                    error = e.toString();
-                  });
-                  return;
-                }
-                setState(() {
-                  error = "User Created";
-                });
-              },
-              height: 45,
-              color: Palette.mainColor,
-              child: Text(
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/images/cat.png",
+                height: 200,
+                fit: BoxFit.fitWidth,
+              ),
+              SizedBox(height: 20),
+              Text(
                 "Register",
-                style: TextStyle(color: Colors.white, fontSize: 16.0),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Palette.mainColor),
               ),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+              SizedBox(height: 30),
+              _nameField(),
+              SizedBox(height: 20),
+              _nimField(),
+              SizedBox(height: 20),
+              _usernameField(),
+              SizedBox(height: 20),
+              _emailField(),
+              SizedBox(height: 20),
+              _passwordField(),
+              SizedBox(height: 30),
+              MaterialButton(
+                onPressed: () async {
+                  if (_usernameController.text.isEmpty ||
+                      _passwordController.text.isEmpty) {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text("Please fill all fields"),
+                            ),
+                          );
+                        });
+                    return;
+                  }
+                  UserModel user = UserModel(
+                      name: _nameController.text,
+                      nim: _nimController.text,
+                      username: _usernameController.text,
+                      email: _emailController.text,
+                      password: _passwordController.text);
+                  try {
+                    await userDatabaseHelper.createUser(user);
+                  } catch (e) {
+                    setState(() {
+                      error = e.toString();
+                    });
+                    return;
+                  }
+                  setState(() {
+                    error = "User Created";
+                  });
+                },
+                height: 45,
+                color: Palette.mainColor,
+                child: Text(
+                  "Register",
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
               ),
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Have an account?',
-                    style: TextStyle(color: Palette.mainColor)),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
-                  },
-                  child: Text('Login', style: TextStyle(color: Colors.black)),
-                )
-              ],
-            ),
-          ],
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Have an account?',
+                      style: TextStyle(color: Palette.mainColor)),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                    },
+                    child: Text('Login', style: TextStyle(color: Colors.black)),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _nameField() {
+    return TextField(
+      controller: _nameController,
+      cursorColor: Palette.mainColor,
+      decoration: InputDecoration(
+        labelText: 'Name',
+        hintText: 'name',
+        labelStyle: TextStyle(color: Palette.mainColor),
+        hintStyle: TextStyle(color: Palette.mainColor),
+        prefixIcon: Icon(Icons.person, color: Palette.mainColor),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        floatingLabelStyle: TextStyle(color: Palette.mainColor),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
+  Widget _nimField() {
+    return TextField(
+      controller: _nimController,
+      cursorColor: Palette.mainColor,
+      decoration: InputDecoration(
+        labelText: 'NIM',
+        hintText: 'NIM',
+        labelStyle: TextStyle(color: Palette.mainColor),
+        hintStyle: TextStyle(color: Palette.mainColor),
+        prefixIcon: Icon(Icons.contact_page_outlined, color: Palette.mainColor),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        floatingLabelStyle: TextStyle(color: Palette.mainColor),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
@@ -113,31 +176,40 @@ class _RegisterPageState extends State<RegisterPage> {
       decoration: InputDecoration(
         labelText: 'Username',
         hintText: 'username',
-        labelStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 14.0,
-          fontWeight: FontWeight.w400,
-        ),
-        hintStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 14.0,
-        ),
-        prefixIcon: Icon(
-          Icons.person,
-          color: Palette.mainColor,
-          size: 18,
-        ),
+        labelStyle: TextStyle(color: Palette.mainColor),
+        hintStyle: TextStyle(color: Palette.mainColor),
+        prefixIcon: Icon(Icons.person, color: Palette.mainColor),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
-        floatingLabelStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 18.0,
-        ),
+        floatingLabelStyle: TextStyle(color: Palette.mainColor),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
+  Widget _emailField() {
+    return TextField(
+      controller: _emailController,
+      cursorColor: Palette.mainColor,
+      decoration: InputDecoration(
+        labelText: 'Email',
+        hintText: 'email',
+        labelStyle: TextStyle(color: Palette.mainColor),
+        hintStyle: TextStyle(color: Palette.mainColor),
+        prefixIcon: Icon(Icons.person, color: Palette.mainColor),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        floatingLabelStyle: TextStyle(color: Palette.mainColor),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
@@ -151,31 +223,17 @@ class _RegisterPageState extends State<RegisterPage> {
       decoration: InputDecoration(
         labelText: 'Password',
         hintText: 'password',
-        labelStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 14.0,
-          fontWeight: FontWeight.w400,
-        ),
-        hintStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 14.0,
-        ),
-        prefixIcon: Icon(
-          Icons.lock,
-          color: Palette.mainColor,
-          size: 18,
-        ),
+        labelStyle: TextStyle(color: Palette.mainColor),
+        hintStyle: TextStyle(color: Palette.mainColor),
+        prefixIcon: Icon(Icons.lock, color: Palette.mainColor),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
-        floatingLabelStyle: TextStyle(
-          color: Palette.mainColor,
-          fontSize: 18.0,
-        ),
+        floatingLabelStyle: TextStyle(color: Palette.mainColor),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Palette.mainColor, width: 1.5),
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
