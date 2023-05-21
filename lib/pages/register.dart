@@ -1,5 +1,6 @@
-// import 'package:bcrypt/bcrypt.dart';
 import 'package:finalproject/components/palettes.dart';
+import 'package:finalproject/data/user_database_helper.dart';
+import 'package:finalproject/model/user.dart';
 import 'package:finalproject/pages/login.dart';
 import 'package:flutter/material.dart';
 
@@ -11,79 +12,15 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  bool isObscure = true;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
-  registerInputHandler() {
-    bool isFilled = true;
-    if (_usernameController.text == '') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Warning! Username can\'t empty!',
-            textAlign: TextAlign.center,
-          ),
-          behavior: SnackBarBehavior.floating,
-          width: 300,
-          duration: Duration(seconds: 2),
-        ),
-      );
-      isFilled = false;
-    } else if (_passwordController.text == '') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Warning! Password can\'t empty!',
-            textAlign: TextAlign.center,
-          ),
-          behavior: SnackBarBehavior.floating,
-          width: 300,
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } else if (confirmPasswordController.text == '') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Warning! Confirm password can\'t empty!',
-            textAlign: TextAlign.center,
-          ),
-          behavior: SnackBarBehavior.floating,
-          width: 300,
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } else if (_passwordController.text.length < 8) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Warning! Password less than 8 characters!',
-            textAlign: TextAlign.center,
-          ),
-          behavior: SnackBarBehavior.floating,
-          width: 300,
-          duration: Duration(seconds: 2),
-        ),
-      );
-      isFilled = false;
-    } else if (confirmPasswordController.text != _passwordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Warning! Confirm password must be same!',
-            textAlign: TextAlign.center,
-          ),
-          behavior: SnackBarBehavior.floating,
-          width: 300,
-          duration: Duration(seconds: 2),
-        ),
-      );
-      isFilled = false;
-    }
-    return isFilled;
-  }
+  String error = "";
+
+  late UserModel _currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -106,59 +43,46 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(height: 20),
             _passwordField(),
             SizedBox(height: 30),
-            // MaterialButton(
-            //   onPressed: () async {
-            //     if (registerInputHandler()) {
-            //           final String hashedPassword = BCrypt.hashpw(
-            //               _passwordController.text, BCrypt.gensalt());
-            //           final int result =
-            //               await DatabaseHelper.instance.insertUser({
-            //             'username': _usernameController.text,
-            //             'password': hashedPassword,
-            //           });
-            //           if (result > 0) {
-            //             // ignore: use_build_context_synchronously
-            //             ScaffoldMessenger.of(context).showSnackBar(
-            //               const SnackBar(
-            //                 content: Text(
-            //                   'Register Success',
-            //                   textAlign: TextAlign.center,
-            //                 ),
-            //                 behavior: SnackBarBehavior.floating,
-            //                 width: 300,
-            //                 duration: Duration(seconds: 2),
-            //               ),
-            //             );
-            //             // ignore: use_build_context_synchronously
-            //             Navigator.pushReplacement(
-            //               context,
-            //               MaterialPageRoute(
-            //                 builder: (context) => const LoginPage(),
-            //               ),
-            //             );
-            //           } else {
-            //             // ignore: use_build_context_synchronously
-            //             ScaffoldMessenger.of(context).showSnackBar(
-            //               const SnackBar(
-            //                 content: Text(
-            //                   'Register Failed',
-            //                   textAlign: TextAlign.center,
-            //                 ),
-            //                 behavior: SnackBarBehavior.floating,
-            //                 width: 300,
-            //                 duration: Duration(seconds: 2),
-            //               ),
-            //             );
-            //           }
-            //         }
-            //   },
-            //   child: Text("Register", style: TextStyle(color: Colors.white)),
-            //   height: 50,
-            //   padding: EdgeInsets.symmetric(horizontal: 50),
-            //   color: Palette.mainColor,
-            //   shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(8)),
-            // ),
+            MaterialButton(
+              onPressed: () async {
+                if (_usernameController.text.isEmpty ||
+                    _passwordController.text.isEmpty ||
+                    _confirmPasswordController.text.isEmpty) {
+                  setState(() {
+                    error = "Please fill all the fields";
+                  });
+                  return;
+                }
+
+                if (_confirmPasswordController.text !=
+                    _passwordController.text) {
+                  setState(() {
+                    error = "Password and Confirm Password must be the same";
+                  });
+                  return;
+                }
+                UserModel user = UserModel(
+                    username: _usernameController.text,
+                    password: _passwordController.text);
+                try {
+                  await userDatabaseHelper.createUser(user);
+                } catch (e) {
+                  setState(() {
+                    error = e.toString();
+                  });
+                  return;
+                }
+                setState(() {
+                  error = "User Created";
+                });
+              },
+              child: Text("Register", style: TextStyle(color: Colors.white)),
+              height: 50,
+              padding: EdgeInsets.symmetric(horizontal: 50),
+              color: Palette.mainColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
             SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -182,7 +106,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _usernameField() {
     return TextField(
-      // key: _formKey,
       controller: _usernameController,
       cursorColor: Palette.mainColor,
       decoration: InputDecoration(

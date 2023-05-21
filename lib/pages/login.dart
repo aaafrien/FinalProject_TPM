@@ -1,7 +1,8 @@
 import 'package:finalproject/components/navbar.dart';
 import 'package:finalproject/components/palettes.dart';
-import 'package:finalproject/data/user_db.dart';
+import 'package:finalproject/data/user_database_helper.dart';
 import 'package:finalproject/pages/register.dart';
+import 'package:finalproject/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,18 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  void validateAndSave() {
-    final FormState? form = _formKey.currentState;
-    if (form != null) {
-      if (form.validate()) {
-        print('Form is valid');
-      } else {
-        print('Form is invalid');
-      }
-    }
-  }
+  String error = "";
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +32,28 @@ class _LoginPageState extends State<LoginPage> {
               _passwordField(),
               SizedBox(height: 30),
               MaterialButton(
-                onPressed: () {
-                  validateAndSave();
-                  String currentUsername = _usernameController.value.text;
-                  String currentPassword = _passwordController.value.text;
-
-                  _processLogin(currentUsername, currentPassword);
+                onPressed: () async {
+                  try {
+                    var listUser =
+                        await userDatabaseHelper.getUserByUsernameAndPassword(
+                            _usernameController.text, _passwordController.text);
+                    if (listUser.length > 0) {
+                      final snackbar = SnackBar(
+                        content: Text('Login Success'),
+                      );
+                      SharedPreferences pref =
+                          await SharedPreferences.getInstance();
+                      pref.setString('username', listUser[0].username!);
+                      pref.setInt('userId', listUser[0].id!);
+                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                      Navigator.pushReplacementNamed(
+                          context, RouteGenerator.navbar);
+                    }
+                  } catch (e) {
+                    setState(() {
+                      error = 'Username or Password is wrong';
+                    });
+                  }
                 },
                 height: 45,
                 color: Palette.mainColor,
@@ -168,37 +174,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  void _processLogin(String username, String password) async {
-    final UserDB _hive = UserDB();
-    bool found = false;
-
-    found = _hive.checkLogin(username, password);
-    if (!found) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Akun tidak ada"),
-          duration: Duration(seconds: 1),
-        ),
-      );
-    } else {
-      setLogin(username, password);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          // builder: (context) => HomePage(username:username),
-          builder: (context) => Navbar(),
-        ),
-      );
-    }
-  }
-
-  void setLogin(String username, String password) async {
-    final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
-
-    SharedPreferences getPref = await _pref;
-    getPref.setBool('isLogin', true);
-    getPref.setString('username', username);
-    getPref.setString('password', password);
   }
 }
