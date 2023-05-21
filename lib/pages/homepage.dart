@@ -98,7 +98,7 @@ class _HomepageState extends State<Homepage> {
                                             snapshot.data![index].name,
                                             style: TextStyle(fontSize: 18),
                                           ),
-                                          Text("by " +
+                                          Text("from " +
                                               snapshot.data![index].origin),
                                           Container(
                                             width: MediaQuery.of(context)

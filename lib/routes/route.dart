@@ -1,3 +1,5 @@
+import 'package:finalproject/components/navbar.dart';
+import 'package:finalproject/pages/convertmoney.dart';
 import 'package:finalproject/pages/homepage.dart';
 import 'package:finalproject/pages/login.dart';
 import 'package:finalproject/pages/register.dart';
@@ -15,6 +17,12 @@ class RouterGenerator {
 
       case RouterName.homepage:
         return MaterialPageRoute(builder: (_) => Homepage());
+
+      case RouterName.navbar:
+        return MaterialPageRoute(builder: (_) => Navbar());
+
+      case RouterName.other:
+        return MaterialPageRoute(builder: (_) => MoneyConverter());
 
       default:
         return _errorRoute();

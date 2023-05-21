@@ -56,8 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                           await SharedPreferences.getInstance();
                       pref.setString('username', listUser[0].username!);
                       pref.setInt('userId', listUser[0].id!);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Navbar()));
+                      Navigator.popAndPushNamed(context, '/navbar');
                     }
                   } catch (e) {
                     setState(() {

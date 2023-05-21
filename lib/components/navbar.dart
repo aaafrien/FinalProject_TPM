@@ -1,5 +1,5 @@
 import 'package:finalproject/components/palettes.dart';
-import 'package:finalproject/pages/favorites.dart';
+import 'package:finalproject/pages/convertmoney.dart';
 import 'package:finalproject/pages/homepage.dart';
 import 'package:finalproject/pages/profile.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class Navbar extends StatefulWidget {
 
 class _NavbarState extends State<Navbar> {
   int _selectedIndex = 0;
-  List pages = [Homepage(), FavoritePage(), ProfilePage()];
+  List pages = [Homepage(), MoneyConverter(), ProfilePage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -30,8 +30,7 @@ class _NavbarState extends State<Navbar> {
           child: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite), label: 'Favorites'),
+              BottomNavigationBarItem(icon: Icon(Icons.money), label: 'Other'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.group), label: 'Profile'),
             ],
